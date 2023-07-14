@@ -6,6 +6,7 @@ import { CardTodo } from './components/CardTodo/CardTodo'
 import { s } from './App.style'
 import { ScrollView } from 'react-native'
 import { TabBottomMenu } from './components/TabBottomMenu/TabBottomMenu'
+import { Alert } from 'react-native'
 
 export default function App() {
   const [selectedTabName, setSelectedTabName] = useState('all')
@@ -46,6 +47,21 @@ export default function App() {
     setTodoList(updatedTodoList)
   }
 
+  function deleteTodo(todoToDelete) {
+    Alert.alert('Suppression', 'Supprimer cette tâche ?', [
+      {
+        text: 'Supprimer',
+        style: 'destructive',
+        onPress: () => {
+          setTodoList(todoList.filter((todo) => todo.id !== todoToDelete.id))
+        },
+      },
+      {
+        text: 'Annuler',
+        style: 'cancel',
+      },
+    ])
+  }
   return (
     <>
       <SafeAreaProvider>
@@ -57,7 +73,11 @@ export default function App() {
             <ScrollView>
               {getFilteredList().map((todo) => (
                 <View style={s.cardItem} key={todo.id}>
-                  <CardTodo onPress={updateTodo} todo={todo} />
+                  <CardTodo
+                    onLongPress={deleteTodo}
+                    onPress={updateTodo}
+                    todo={todo}
+                  />
                 </View>
               ))}
             </ScrollView>
