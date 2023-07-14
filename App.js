@@ -17,6 +17,21 @@ export default function App() {
     { id: 7, title: 'Boire un café', isCompleted: true },
     { id: 8, title: 'Arreter de fumer', isCompleted: false },
   ])
+
+  function updateTodo(todo) {
+    const updatedTodo = {
+      ...todo,
+      isCompleted: !todo.isCompleted,
+    }
+    const indexToUpdate = todoList.findIndex(
+      (todo) => todo.id == updatedTodo.id,
+    )
+
+    const updatedTodoList = [...todoList]
+    updatedTodoList[indexToUpdate] = updatedTodo
+    setTodoList(updatedTodoList)
+  }
+
   return (
     <>
       <SafeAreaProvider>
@@ -28,7 +43,7 @@ export default function App() {
             <ScrollView>
               {todoList.map((todo) => (
                 <View style={s.cardItem} key={todo.id}>
-                  <CardTodo todo={todo} />
+                  <CardTodo onPress={updateTodo} todo={todo} />
                 </View>
               ))}
             </ScrollView>
