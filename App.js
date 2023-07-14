@@ -21,6 +21,17 @@ export default function App() {
     { id: 8, title: 'Arreter de fumer', isCompleted: false },
   ])
 
+  function getFilteredList() {
+    switch (selectedTabName) {
+      case 'all':
+        return todoList
+      case 'inProgress':
+        return todoList.filter((todo) => !todo.isCompleted)
+      case 'done':
+        return todoList.filter((todo) => todo.isCompleted)
+    }
+  }
+
   function updateTodo(todo) {
     const updatedTodo = {
       ...todo,
@@ -44,7 +55,7 @@ export default function App() {
           </View>
           <View style={s.body}>
             <ScrollView>
-              {todoList.map((todo) => (
+              {getFilteredList().map((todo) => (
                 <View style={s.cardItem} key={todo.id}>
                   <CardTodo onPress={updateTodo} todo={todo} />
                 </View>
@@ -56,6 +67,7 @@ export default function App() {
       <View>
         <TabBottomMenu
           onPress={setSelectedTabName}
+          todoList={todoList}
           selectedTabName={selectedTabName}
         />
       </View>
