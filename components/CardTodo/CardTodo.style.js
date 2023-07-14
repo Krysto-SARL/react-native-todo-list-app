@@ -1,0 +1,32 @@
+import { StyleSheet } from 'react-native'
+
+const s = StyleSheet.create({
+  card: {
+    backgroundColor: 'white',
+    display: 'flex',
+    flexDirection: 'row',
+    height: 115,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.36,
+    shadowRadius: 6.68,
+
+    elevation: 11,
+  },
+  text: {
+    fontSize: 25,
+  },
+  img: {
+    height: 25,
+    width: 25,
+  },
+})
+
+export { s }
