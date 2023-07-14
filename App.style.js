@@ -4,6 +4,7 @@ const s = StyleSheet.create({
   app: {
     backgroundColor: '#f9f9f9',
     flex: 1,
+    padding: 10,
   },
 
   header: {
