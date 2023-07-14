@@ -6,11 +6,14 @@ const s = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-
+  cardItem: {
+    marginBottom: 20,
+  },
   header: {
     flex: 1,
   },
   body: {
+    marginTop: 30,
     flex: 5,
   },
   footer: {
