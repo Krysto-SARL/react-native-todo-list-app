@@ -7,20 +7,16 @@ import { s } from './App.style'
 import { ScrollView } from 'react-native'
 import { TabBottomMenu } from './components/TabBottomMenu/TabBottomMenu'
 import { Alert } from 'react-native'
+import { ButtonAdd } from './components/ButtonAdd/ButtonAdd'
+import Dialog from 'react-native-dialog'
+import uuid from 'react-native-uuid'
 
 export default function App() {
   const [selectedTabName, setSelectedTabName] = useState('all')
 
-  const [todoList, setTodoList] = useState([
-    { id: 1, title: 'Sortir Askanounette', isCompleted: false },
-    { id: 2, title: 'Caliner Maillou', isCompleted: false },
-    { id: 3, title: 'Caliner Guccu', isCompleted: false },
-    { id: 4, title: 'Faire les courses', isCompleted: true },
-    { id: 5, title: 'Aller chez billys', isCompleted: false },
-    { id: 6, title: 'Apprendre React Native', isCompleted: false },
-    { id: 7, title: 'Boire un café', isCompleted: true },
-    { id: 8, title: 'Arreter de fumer', isCompleted: false },
-  ])
+  const [todoList, setTodoList] = useState([])
+  const [isDialogVisible, setIsDialogVisible] = useState(false)
+  const [inputValue, setInputValue] = useState('')
 
   function getFilteredList() {
     switch (selectedTabName) {
@@ -62,6 +58,20 @@ export default function App() {
       },
     ])
   }
+
+  function showAddDialog() {
+    setIsDialogVisible(true)
+  }
+  function addTodo() {
+    const newTodo = {
+      id: uuid.v4(),
+      title: inputValue,
+      isCompleted: false,
+    }
+    setTodoList([...todoList, newTodo])
+    setIsDialogVisible(false)
+  }
+
   return (
     <>
       <SafeAreaProvider>
@@ -70,6 +80,7 @@ export default function App() {
             <Header />
           </View>
           <View style={s.body}>
+            <ButtonAdd onPress={showAddDialog} />
             <ScrollView>
               {getFilteredList().map((todo) => (
                 <View style={s.cardItem} key={todo.id}>
@@ -91,6 +102,22 @@ export default function App() {
           selectedTabName={selectedTabName}
         />
       </View>
+
+      <Dialog.Container
+        visible={isDialogVisible}
+        onBackdropPress={() => setIsDialogVisible(false)}
+      >
+        <Dialog.Title>Créer un nouvelle tâche</Dialog.Title>
+        <Dialog.Description>
+          Choisir un nom pour la nouvelle tâche
+        </Dialog.Description>
+        <Dialog.Input onChangeText={setInputValue} />
+        <Dialog.Button
+          disabled={inputValue.trim().length == ''}
+          label="Créer"
+          onPress={addTodo}
+        />
+      </Dialog.Container>
     </>
   )
 }
