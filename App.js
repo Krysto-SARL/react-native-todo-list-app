@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Text, View } from 'react-native'
 import { Header } from './components/Header/Header'
@@ -10,6 +10,9 @@ import { Alert } from 'react-native'
 import { ButtonAdd } from './components/ButtonAdd/ButtonAdd'
 import Dialog from 'react-native-dialog'
 import uuid from 'react-native-uuid'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+let isFirstRender = true
+let isLoadUpdate = false
 
 export default function App() {
   const [selectedTabName, setSelectedTabName] = useState('all')
@@ -17,6 +20,43 @@ export default function App() {
   const [todoList, setTodoList] = useState([])
   const [isDialogVisible, setIsDialogVisible] = useState(false)
   const [inputValue, setInputValue] = useState('')
+
+  useEffect(() => {
+    loadTodoList()
+  }, [])
+
+  useEffect(() => {
+    if (isLoadUpdate) {
+      isLoadUpdate = false
+    } else {
+      if (!isFirstRender) {
+        saveTodoList()
+      } else {
+        isFirstRender = false
+      }
+    }
+  }, [todoList])
+
+  async function saveTodoList() {
+    try {
+      await AsyncStorage.setItem('@todoList', JSON.stringify(todoList))
+    } catch (err) {
+      alert('Une erreur est survenue !' + err)
+    }
+  }
+
+  async function loadTodoList() {
+    try {
+      const stringifiedTodoList = await AsyncStorage.getItem('@todoList')
+      if (stringifiedTodoList !== null) {
+        const parsedTodoList = JSON.parse(stringifiedTodoList)
+        isLoadUpdate = true
+        setTodoList(parsedTodoList)
+      }
+    } catch (err) {
+      alert('Une erreur est survenue !' + err)
+    }
+  }
 
   function getFilteredList() {
     switch (selectedTabName) {
