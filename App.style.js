@@ -16,9 +16,6 @@ const s = StyleSheet.create({
     marginTop: 30,
     flex: 5,
   },
-  footer: {
-    height: 70,
-  },
 })
 
 export { s }

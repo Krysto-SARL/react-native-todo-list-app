@@ -5,8 +5,11 @@ import { Header } from './components/Header/Header'
 import { CardTodo } from './components/CardTodo/CardTodo'
 import { s } from './App.style'
 import { ScrollView } from 'react-native'
+import { TabBottomMenu } from './components/TabBottomMenu/TabBottomMenu'
 
 export default function App() {
+  const [selectedTabName, setSelectedTabName] = useState('all')
+
   const [todoList, setTodoList] = useState([
     { id: 1, title: 'Sortir Askanounette', isCompleted: false },
     { id: 2, title: 'Caliner Maillou', isCompleted: false },
@@ -50,8 +53,11 @@ export default function App() {
           </View>
         </SafeAreaView>
       </SafeAreaProvider>
-      <View style={s.footer}>
-        <Text>Footer</Text>
+      <View>
+        <TabBottomMenu
+          onPress={setSelectedTabName}
+          selectedTabName={selectedTabName}
+        />
       </View>
     </>
   )
